@@ -3,10 +3,10 @@ require './lib/ftp'
 
 class TestFtp < Test::Unit::TestCase
   def setup
-    @host = ::Settings.pixta.ftp.host
-    @username = ::Settings.pixta.ftp.username
-    @password = ::Settings.pixta.ftp.password
-    @port = ::Settings.pixta.ftp.port
+    @host = ::Settings.ftp.host
+    @username = ::Settings.ftp.username
+    @password = ::Settings.ftp.password
+    @port = ::Settings.ftp.port
 
     @ftp = Ftp.new(
       host: @host,

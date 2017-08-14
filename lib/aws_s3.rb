@@ -1,3 +1,5 @@
+require 'aws-sdk'
+
 class S3Adapter
   attr_accessor :bucket_name, :client
 
@@ -11,8 +13,12 @@ class S3Adapter
     yield(self) if block_given?
   end
 
-  def download(key)
-    local_file_name = "./tmp/#{File.basename(key)}"
+  def download(key, local_path: nil)
+    local_file_name = if local_path
+                        local_path
+                      else
+                        "./tmp/#{File.basename(key)}"
+                      end
 
     File.open(local_file_name, 'wb') do |file|
       @client.get_object(bucket: bucket_name, key: key) do |chunk|

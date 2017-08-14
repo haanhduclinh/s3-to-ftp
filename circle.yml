@@ -21,6 +21,10 @@ machine:
 dependencies:
   pre:
     - gem install bundler --pre
+    - gem install fakes3
+    - mkdir ~/fakes3
+    - fakes3 -r ~/fakes3 -p 4567:
+        background: true
 
   override:
     - bundle install: # note ':' here
@@ -29,5 +33,7 @@ dependencies:
 ## Customize test commands
 test:
   override:
-    - ruby test/test_aws_s3.rb # use PHPunit for testing
+    - ruby test/test_aws_s3.rb
+    - ruby test/test_main.rb
+    - ruby test/test_csv_map.rb
     - rubocop

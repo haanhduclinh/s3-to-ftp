@@ -3,6 +3,6 @@ require './lib/main'
 
 class TestMain < Test::Unit::TestCase
   def test_valid_config
-    assert_equal(Settings.pixta.ftp.username, 'haanhduc')
+    assert_equal(Settings.ftp.username, 'test')
   end
 end
