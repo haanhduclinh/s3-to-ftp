@@ -1,5 +1,5 @@
 class Ftp
-  %i(host username password port all).each do |attribute|
+  %i[host username password port all].each do |attribute|
     attr_accessor attribute
   end
 
@@ -26,16 +26,12 @@ class Ftp
     @ftp.chdir(path)
   end
 
-  def size(filename)
-    @ftp.size(filename)
-  end
-
   def put(local_file_path)
     @ftp.put(local_file_path)
   end
 
   def exist?(filename)
-    response = parse_from_ftp_info(all, fields: %w(filename))
+    response = parse_from_ftp_info(all, fields: %w[filename])
     response.any? { |data| data[:filename] == filename }
   end
 
@@ -81,7 +77,7 @@ class Ftp
 
   def parse_from_ftp_info(response_array, fields: [])
     response_array.map do |ftp_infor|
-      role, _number, owner, type, permission, _month, _day, _hours, filename = ftp_infor.split
+      role, _n, owner, type, permission, _m, _d, _h, filename = ftp_infor.split
       {
         permission: permission,
         role: role,

@@ -1,5 +1,3 @@
-require 'aws-sdk'
-
 class S3Adapter
   attr_accessor :bucket_name, :client
 

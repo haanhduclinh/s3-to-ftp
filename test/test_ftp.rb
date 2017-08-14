@@ -1,5 +1,5 @@
 require_relative 'helper'
-require "./lib/ftp"
+require './lib/ftp'
 
 class TestFtp < Test::Unit::TestCase
   def setup
@@ -8,7 +8,12 @@ class TestFtp < Test::Unit::TestCase
     @password = ::Settings.pixta.ftp.password
     @port = ::Settings.pixta.ftp.port
 
-    @ftp = Ftp.new(host: @host, username: @username, password: @password, port: @port)
+    @ftp = Ftp.new(
+      host: @host,
+      username: @username,
+      password: @password,
+      port: @port
+    )
   end
 
   def test_valid_attribute
@@ -32,7 +37,7 @@ class TestFtp < Test::Unit::TestCase
 
   def test_size
     @ftp.all
-    assert_equal(@ftp.size > 0, true)
+    assert_equal(@ftp.size.zero?, false)
   end
 
   def test_create_directory
@@ -43,5 +48,3 @@ class TestFtp < Test::Unit::TestCase
     assert_equal(result, true)
   end
 end
-
-

@@ -1,0 +1,11 @@
+AllCops:
+  Includes:
+    - lib/**
+    - test/**
+    - '**/Gemfile'
+Documentation:
+  Enabled: false
+Metrics/MethodLength:
+  Max: 23
+Style/FrozenStringLiteralComment:
+  Enabled: false
