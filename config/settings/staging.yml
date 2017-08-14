@@ -1,0 +1,13 @@
+pixta:
+  ftp:
+    host: <%= ENV['HOST'] %>
+    username: <%= ENV['USERNAME'] %>
+    password: <%= ENV['PASSWORD'] %>
+    port: <%= ENV['PORT'] %>
+  aws:
+    s3:
+      bucket_name: <%= ENV['BUCKET_NAME'] %>
+      secret_access_key: <%= ENV['SECRET_ACCESS_KEY'] %>
+      access_key_id: <%= ENV['ACCESS_KEY_ID'] %>
+      region: <%= ENV['REGION'] %>
+      endpoint: <%= ENV['ENDPOINT'] %>
