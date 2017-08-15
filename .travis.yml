@@ -1,0 +1,18 @@
+language: ruby
+rvm:
+ - 2.3.4
+env:
+  - ENV=test
+before_install:
+  - mkdir ~/fakes3
+install:
+  - gem install bundler --pre
+  - gem install fakes3
+  - bundle install
+before_script:
+  - fakes3 -r ~/fakes3 -p 4567 &
+script:
+  - ruby test/test_aws_s3.rb
+  - ruby test/test_main.rb
+  - ruby test/test_csv_map.rb
+  - rubocop

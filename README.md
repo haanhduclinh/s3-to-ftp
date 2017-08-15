@@ -1,6 +1,6 @@
 # S3 to FTP
 
-[![Code Climate](https://codeclimate.com/github/haanhduclinh/s3-to-ftp.png)](https://codeclimate.com/github/haanhduclinh/s3-to-ftp) [![CI](https://circleci.com/gh/haanhduclinh/s3-to-ftp.svg?style=shield&circle-token=17308ffeff6fb73d43e833efa38c1f4fd86224b4)](https://circleci.com/gh/haanhduclinh/s3-to-ftp)
+[![Code Climate](https://codeclimate.com/github/haanhduclinh/s3-to-ftp.png)](https://codeclimate.com/github/haanhduclinh/s3-to-ftp) [![CI](https://circleci.com/gh/haanhduclinh/s3-to-ftp.svg?style=shield&circle-token=17308ffeff6fb73d43e833efa38c1f4fd86224b4)](https://circleci.com/gh/haanhduclinh/s3-to-ftp) [![CI](https://travis-ci.org/haanhduclinh/s3-to-ftp.svg?branch=master)](https://travis-ci.org/haanhduclinh/s3-to-ftp)
 
 # Background
 - Upload file from AWS S3 to FTP Server
