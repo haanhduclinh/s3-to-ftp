@@ -1,3 +1,5 @@
+require 'coveralls'
+Coveralls.wear!
 require 'dotenv/load'
 require 'config'
 require 'test/unit'
