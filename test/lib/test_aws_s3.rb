@@ -1,20 +1,19 @@
-require_relative 'helper'
+require_relative '../helper'
 require './lib/aws_s3'
 require 'fileutils'
 
 class TestAwsS3 < Test::Unit::TestCase
+  include Config::S3
+
   def setup
-    @s3_adapter = S3Adapter.new(
-      access_key_id,
-      secret_access_key,
-      region, bucket
-    ) do |config|
+    @s3_adapter = S3Adapter.new do |config|
       config.client = Aws::S3::Client.new(
         access_key_id: access_key_id,
         secret_access_key: secret_access_key,
         region: region,
         endpoint: endpoint
       )
+      config.bucket_name = bucket_name
     end
   end
 
@@ -41,27 +40,5 @@ class TestAwsS3 < Test::Unit::TestCase
     temp = './tmp/eric.jpg'
     assert_equal(File.exist?(temp), true)
     FileUtils.rm(temp)
-  end
-
-  private
-
-  def bucket
-    Settings.aws.s3.bucket_name
-  end
-
-  def access_key_id
-    Settings.aws.s3.access_key_id
-  end
-
-  def secret_access_key
-    Settings.aws.s3.secret_access_key
-  end
-
-  def region
-    Settings.aws.s3.secret_access_key
-  end
-
-  def endpoint
-    Settings.aws.s3.endpoint
   end
 end

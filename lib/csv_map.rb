@@ -9,8 +9,8 @@ class CsvMap
 
   def read_file(file)
     CSV.foreach(file, headers: true)
-       .each_with_object([]) do |(aws_key, ftp_path), data|
-      data << { aws_key: aws_key, ftp_path: ftp_path }
+       .each_with_object([]) do |row, data|
+      data << { aws_key: row['aws_key'], ftp_path: row['ftp_path'] }
     end
   end
 end

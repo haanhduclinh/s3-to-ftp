@@ -1,19 +1,19 @@
 require_relative 'init'
 
 class Main
+  attr_accessor :s3, :ftp
+  include Config::S3
+  include Config::Ftp
+
   def initialize
-    @s3 = S3Adapter.new(
-      access_key_id,
-      secret_access_key,
-      region,
-      bucket_name
-    )
+    @s3 = S3Adapter.new(s3_args)
     @ftp = Ftp.new(
-      host: @host,
-      username: @username,
-      password: @password,
-      port: @port
+      host: host,
+      username: username,
+      password: password,
+      port: port
     )
+    yield(self) if block_given?
   end
 
   def run!
@@ -27,6 +27,8 @@ class Main
         )
       end
     end
+
+    true
   end
 
   def aws_to_ftp(aws_key:, ftp_path:)
@@ -36,6 +38,15 @@ class Main
   end
 
   private
+
+  def s3_args
+    {
+      access_key_id: access_key_id,
+      secret_access_key: secret_access_key,
+      region: region,
+      bucket_name: bucket_name
+    }
+  end
 
   def aws_to_local(aws_key, local_path:)
     @s3.download(aws_key, local_path: local_path)
@@ -47,25 +58,5 @@ class Main
 
   def maper_source
     Settings.maper
-  end
-
-  def bucket
-    Settings.aws.s3.bucket_name
-  end
-
-  def access_key_id
-    Settings.aws.s3.access_key_id
-  end
-
-  def secret_access_key
-    Settings.aws.s3.secret_access_key
-  end
-
-  def region
-    Settings.aws.s3.secret_access_key
-  end
-
-  def endpoint
-    Settings.aws.s3.endpoint
   end
 end

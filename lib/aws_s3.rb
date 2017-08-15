@@ -1,15 +1,12 @@
 require 'aws-sdk'
+require 'fileutils'
 
 class S3Adapter
   attr_accessor :bucket_name, :client
 
-  def initialize(access_key_id, secret_access_key, region, bucket_name)
-    @bucket_name = bucket_name
-    @client = Aws::S3::Client.new(
-      access_key_id: access_key_id,
-      secret_access_key: secret_access_key,
-      region: region
-    )
+  def initialize(args = {})
+    @bucket_name = args[:bucket_name]
+    @client = s3_client(args) unless args.empty?
     yield(self) if block_given?
   end
 
@@ -19,7 +16,7 @@ class S3Adapter
                       else
                         "./tmp/#{File.basename(key)}"
                       end
-
+    create_directory_if_none_exsits(local_file_name)
     File.open(local_file_name, 'wb') do |file|
       @client.get_object(bucket: bucket_name, key: key) do |chunk|
         file.write(chunk)
@@ -42,5 +39,20 @@ class S3Adapter
       key: File.basename(local_path)
     )
     res[:etag]
+  end
+
+  private
+
+  def s3_client(args)
+    Aws::S3::Client.new(
+      access_key_id: args[:access_key_id],
+      secret_access_key: args[:secret_access_key],
+      region: args[:region]
+    )
+  end
+
+  def create_directory_if_none_exsits(path)
+    dirname = File.dirname(path)
+    FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
   end
 end

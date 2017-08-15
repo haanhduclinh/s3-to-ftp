@@ -1,12 +1,16 @@
 class Ftp
-  %i[host username password port all].each do |attribute|
+  %i[host username password port current_path].each do |attribute|
     attr_accessor attribute
   end
 
   TYPE_FOLDER = 1
   TYPE_FILE = 2
 
+  BACK = '.'.freeze
+  LEVEL_UP = '..'.freeze
+
   def initialize(host:, username:, password:, port: 21)
+    @current_path = '.'
     @host = host
     @username = username
     @password = password
@@ -23,24 +27,55 @@ class Ftp
   end
 
   def change_remote_path(path)
+    @current_path = File.join(@current_path, path)
     @ftp.chdir(path)
   end
 
   def put(local_file_path)
+    create_dirs(local_file_path)
+
     @ftp.put(local_file_path)
+    reset_current_path
   end
 
-  def exist?(filename)
+  def create_dirs(local_file_path)
+    local_path = File.dirname(local_file_path)
+    server_dirname = local_path.sub('./', '')
+    file_path = '.'
+    server_dirname.split('/').each do |dir|
+      file_path << '/' + dir
+      create_directory(dir) unless exist?(dir, keep_current_path: true)
+
+      change_remote_path(file_path.split('/').last)
+    end
+  end
+
+  def exist?(file_path, keep_current_path: false)
+    dir_name = File.dirname(file_path)
+    filename = File.basename(file_path)
+
+    change_remote_path(dir_name) if parent_folder?(dir_name) || sub_folder?(dir_name)
+
     response = parse_from_ftp_info(all, fields: %w[filename])
+    reset_current_path unless keep_current_path
     response.any? { |data| data[:filename] == filename }
   end
 
+  def delete(file_path)
+    dir_path = File.dirname(file_path)
+    filename = File.basename(file_path)
+    change_remote_path(dir_path)
+    response = @ftp.delete(filename)
+    reset_current_path
+    response
+  end
+
   def all
-    @all = @ftp.list('.')
+    @ftp.list
   end
 
   def size
-    @all ? @all.size : 0
+    all.size
   end
 
   def list_all(type: nil)
@@ -67,6 +102,21 @@ class Ftp
 
   private
 
+  def reset_current_path
+    str = ''
+    @current_path.count('/').times { str << '../' }
+    @current_path = '.'
+    @ftp.chdir(str)
+  end
+
+  def parent_folder?(path)
+    path.count('/') > 0
+  end
+
+  def sub_folder?(path)
+    path.count('/') > 1
+  end
+
   def file_type(ftp_type)
     if ftp_type =~ /\d/
       TYPE_FOLDER
@@ -84,7 +134,9 @@ class Ftp
         owner: owner,
         type: file_type(type),
         filename: filename
-      }.keep_if { |key, _value| fields.include?(key.to_s) }
+      }.keep_if do |key, value|
+        fields.include?(key.to_s) && value != BACK && value != LEVEL_UP
+      end
     end
   end
 end

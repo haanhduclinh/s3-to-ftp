@@ -1,8 +1,8 @@
 ftp:
   host: 127.0.0.1
-  username: test
-  password: test
-  port: 10102
+  username: anonymous
+  password: xxx
+  port: <%= File.read('./tmp/pid/test.pid').to_i %>
 aws:
   s3:
     bucket_name: test_bucket

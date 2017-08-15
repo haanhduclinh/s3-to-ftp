@@ -1,4 +1,4 @@
-require_relative 'helper'
+require_relative '../helper'
 require './lib/csv_map'
 
 class TestCsvMap < Test::Unit::TestCase
