@@ -2,7 +2,7 @@ language: ruby
 rvm:
  - 2.3.4
 env:
-  - ENV=test
+  - ENV=staging
 before_install:
   - mkdir ~/fakes3
 install:
@@ -11,7 +11,6 @@ install:
   - bundle install
 before_script:
   - fakes3 -r ~/fakes3 -p 4567 &
-  - ruby script/ftp_server.rb &
 script:
   - ruby test/lib/test_aws_s3.rb
   - ruby test/lib/test_main.rb

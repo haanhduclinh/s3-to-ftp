@@ -32,13 +32,17 @@ class Ftp
   end
 
   def put(local_file_path)
-    create_dirs(local_file_path)
+    # sample './tmp/abc/level2/sample.jpg'
+    # after remove. It will be './abc/level2/sample.jpg'
+    server_path = local_file_path.sub('/tmp', '')
+
+    create_dirs_and_change_remote(server_path)
 
     @ftp.put(local_file_path)
     reset_current_path
   end
 
-  def create_dirs(local_file_path)
+  def create_dirs_and_change_remote(local_file_path)
     local_path = File.dirname(local_file_path)
     server_dirname = local_path.sub('./', '')
     file_path = '.'
@@ -110,15 +114,15 @@ class Ftp
   end
 
   def parent_folder?(path)
-    path.count('/') > 0
+    path.count('/').positive?
   end
 
   def sub_folder?(path)
     path.count('/') > 1
   end
 
-  def file_type(ftp_type)
-    if ftp_type =~ /\d/
+  def file_type(ftp_type, filename)
+    if ftp_type =~ /\d/ || File.basename(filename).include?('.') == false
       TYPE_FOLDER
     else
       TYPE_FILE
@@ -132,7 +136,7 @@ class Ftp
         permission: permission,
         role: role,
         owner: owner,
-        type: file_type(type),
+        type: file_type(type, filename),
         filename: filename
       }.keep_if do |key, value|
         fields.include?(key.to_s) && value != BACK && value != LEVEL_UP

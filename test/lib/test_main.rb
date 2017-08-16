@@ -23,10 +23,6 @@ class TestMain < Test::Unit::TestCase
     end
   end
 
-  def test_valid_config
-    assert_equal(Settings.ftp.username, 'anonymous')
-  end
-
   def test_progress
     assert_equal(@m.run!, true)
   end

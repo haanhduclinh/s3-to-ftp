@@ -47,6 +47,12 @@ class TestFtp < Test::Unit::TestCase
     assert_equal(@ftp.send(:sub_folder?, example), true)
   end
 
+  def test_list_all
+    assert_equal(@ftp.list_all.size.positive?, true)
+    assert_equal(@ftp.list_all(type: :folder).size.positive?, true)
+    assert_equal(@ftp.list_all(type: :file).size.positive?, true)
+  end
+
   def test_method_check_has_parent_folder
     example = 'public/eric.jp'
     assert_equal(@ftp.send(:parent_folder?, example), true)

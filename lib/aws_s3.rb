@@ -16,6 +16,7 @@ class S3Adapter
                       else
                         "./tmp/#{File.basename(key)}"
                       end
+
     create_directory_if_none_exsits(local_file_name)
     File.open(local_file_name, 'wb') do |file|
       @client.get_object(bucket: bucket_name, key: key) do |chunk|

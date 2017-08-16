@@ -25,8 +25,6 @@ dependencies:
     - mkdir ~/fakes3
     - fakes3 -r ~/fakes3 -p 4567:
         background: true
-    - ruby script/ftp_server.rb:
-        background: true
   override:
     - bundle install: # note ':' here
         timeout: 180 # fail if command has no output for 3 minutes

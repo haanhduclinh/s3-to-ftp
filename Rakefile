@@ -1,5 +1,4 @@
-task default: %w[test]
-
+desc "run test"
 task :test do
   ruby "test/lib/test_aws_s3.rb"
   ruby "test/lib/test_main.rb"
