@@ -20,7 +20,8 @@ class Main
     maper_source.each do |source|
       file_path = "./config/#{source}"
       csv = CsvMap.new(file_path)
-      csv.csv.each do |s3_and_ftp_path|
+      csv.csv.each_with_index do |s3_and_ftp_path, index|
+        display_bar(csv.csv.size, index + 1)
         aws_to_ftp(
           aws_key: s3_and_ftp_path[:aws_key],
           ftp_path: s3_and_ftp_path[:ftp_path]
@@ -38,6 +39,11 @@ class Main
   end
 
   private
+
+  def display_bar(total, current)
+    current_percent = (current * 100 / total).round
+    print "Total: #{total} | Current: #{current} | Percent: #{current_percent}%", "\r"
+  end
 
   def s3_args
     {
