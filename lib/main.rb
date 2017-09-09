@@ -6,13 +6,7 @@ class Main
   include Config::Ftp
 
   def initialize
-    @s3 = S3Adapter.new(s3_args)
-    @ftp = Ftp.new(
-      host: host,
-      username: username,
-      password: password,
-      port: port
-    )
+    set_init
     yield(self) if block_given?
   end
 
@@ -36,9 +30,23 @@ class Main
     local_file_path = "./tmp/#{ftp_path}"
     aws_to_local(aws_key, local_path: local_file_path)
     upload_to_ftp(local_file_path)
+  rescue => e
+    set_init
+    puts "error: #{e.message}"
+    aws_to_ftp(aws_key: aws_key, ftp_path: ftp_path)
   end
 
   private
+
+  def set_init
+    @s3 = S3Adapter.new(s3_args)
+    @ftp = Ftp.new(
+      host: host,
+      username: username,
+      password: password,
+      port: port
+    )
+  end
 
   def display_bar(total, current)
     current_percent = (current * 100 / total).round
