@@ -18,6 +18,25 @@ ENV=production ruby script/s3_to_ftp.rb
 - Folk project
 - Create pull request. Please remember add `test` and make sure pass all of test.
 
+# How to test this project on local environment
+- run `fakes3`
+
+```
+fakes3 -r ~/fakes3_folder -p 4567
+```
+
+- run fake ftp-server
+
+```
+ruby scrip/ftp_server
+```
+
+- run test
+
+```
+ENV=test rake test
+```
+
 # Author
 
 haanhduclinh@yahoo.com
