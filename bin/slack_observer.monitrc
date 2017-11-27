@@ -1,0 +1,4 @@
+check process slackobserver matching "slack_observer"
+  start program = "/bin/su - deploy -c 'cd /srv/www/aws_to_ftp/current && ruby /srv/www/aws_to_ftp/current/script/slack_observer.rb'"
+  stop program = "/bin/bash -c '/usr/bin/pkill slackobserver'"
+  if not exist for 2 cycles then restart
