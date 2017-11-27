@@ -6,21 +6,17 @@
 - Upload file from AWS S3 to FTP Server
 
 # How to use
-- create `.env` include below information
+- make sure you already install `ruby 2.3.4` and bundler
+- create `production.yml` by copy `config/settings/staging` and fill your information
+- create `source.csv` like the sample `config/map.csv`. Please keep header always `aws_key,ftp_path`
 
-Example
-
+```ruby
+ENV=production ruby script/s3_to_ftp.rb
 ```
-HOST=yourftpserver.com
-USERNAME=username
-PASSWORD=password
-PORT=21
-BUCKET_NAME=your_bucket_name
-SECRET_ACCESS_KEY=xxxx
-ACCESS_KEY_ID=yyyy
-REGION=ap-south-east
 
-```
+# How to contributor
+- Folk project
+- Create pull request. Please remember add `test` and make sure pass all of test.
 
 # Author
 

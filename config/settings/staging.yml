@@ -11,4 +11,4 @@ aws:
     region: <%= ENV['REGION'] %>
     endpoint: <%= ENV['ENDPOINT'] %>
 maper:
-  - map.csv
+  - <%= ENV['MAPER'] %>
