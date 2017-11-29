@@ -19,7 +19,7 @@ class Main
       max_file = csv.csv.size - 1
       for index in start_point..max_file
         s3_and_ftp_path = csv.csv[index]
-        display_bar(max_file, index + 1, s3_and_ftp_path)
+        display_bar(max_file, index + 1, s3_and_ftp_path) if (index%10 == 1)
         aws_to_ftp(
           aws_key: s3_and_ftp_path[:aws_key],
           ftp_path: s3_and_ftp_path[:ftp_path]
@@ -38,10 +38,13 @@ class Main
     aws_to_local(aws_key, local_path: local_file_path)
     upload_to_ftp(local_file_path)
   rescue => _e
-    p "Time: #{Time.now} | we have error: #{_e.message} | begin retry"
-    sleep(3)
-    init_s3_and_ftp
-    aws_to_ftp(aws_key: aws_key, ftp_path: ftp_path)
+    retry_times ||= 0
+    p "Time: #{Time.now} | we have error: #{_e.message} | begin retry: #{retry_times} times"
+    if retry_times <= 3
+      sleep(3)
+      init_s3_and_ftp
+      aws_to_ftp(aws_key: aws_key, ftp_path: ftp_path)
+    end
   end
 
   private
